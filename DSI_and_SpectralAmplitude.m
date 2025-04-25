@@ -33,7 +33,11 @@ clear HVV dateC
 % Detect sampling interval
 intervalo_original = median(diff(dateX)) * 24;
 
+% VENTANAESPECTRO defines the length of the time window for computing the fft, 5*PASOENHORAS, means that it will have a length of 5 days
+
 VENTANAESPECTRO = 5 * PASOENHORAS;
+
+% OVERLAP defines the overlap between consecutive time windows to compute the spectrogram, that will be saved in Espect vector
 OVERLAP = round(VENTANAESPECTRO / 2);
 tiempo_redondeado = dateshift(datetime(datestr(dateX)), 'start', 'hour');
 
@@ -129,8 +133,10 @@ for pairIdx = 1
     end
 end
 
-% Save results
+% Save results of the DSI time series
 save('DSI_results.mat', 'DSI');
+
+% If we are only interested on studying the 12 hour peak, we save only Ampli_12
 save('Ampli_12_results.mat', 'Ampli_12');
 
 function [Periodo, P11, f, Ampli24, F24, Ampli12, F12, Pnorm] = estimatePeriodicityWithPeaks(DSI, PASOENHORAS, KEY, VENTANAESPECTRO)
